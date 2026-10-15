@@ -201,19 +201,41 @@ The server is launched with [uv](https://docs.astral.sh/uv/), which must be on y
 Without the plugin system:
 `claude mcp add sec10k -e SEC10K_USER_AGENT="Me me@example.com" -- sec10k-mcp`
 
-**Claude Desktop** (`claude_desktop_config.json`):
+**Claude desktop app (macOS / Windows)**
+
+The app has no `/plugin` command, but it runs local MCP servers, which is where all the
+tools live. You don't need to clone anything; uv installs the server from GitHub. Do these
+steps on the computer where Claude Desktop runs. Each computer keeps its own memory in
+`~/.sec10k`, so ingest your tickers again there; it's free and takes about a second.
+
+1. Install [uv](https://docs.astral.sh/uv/) (`curl -LsSf https://astral.sh/uv/install.sh | sh`)
+   and note its full path from `which uv`. The app doesn't see your shell's PATH.
+2. Open *Settings → Developer → Edit Config* and add the following to
+   `claude_desktop_config.json`:
 
 ```json
 {
   "mcpServers": {
     "sec10k": {
-      "command": "uv",
-      "args": ["run", "--quiet", "--project", "/path/to/sec10k", "--extra", "mcp", "sec10k-mcp"],
+      "command": "/Users/YOU/.local/bin/uv",
+      "args": ["tool", "run", "--python", "3.12",
+               "--from", "sec10k[mcp] @ git+https://github.com/jsemrau/sec-10k-plugin",
+               "sec10k-mcp"],
       "env": { "SEC10K_USER_AGENT": "Your Name you@example.com" }
     }
   }
 }
 ```
+
+3. Quit and reopen Claude. The sec10k tools appear under the tools/connectors menu in a
+   chat. Then ask, for example: "Ingest APLD's latest 10-K and tell me about its legal
+   proceedings."
+4. Optional: teach Claude the workflow. Zip the `skills/sec-10k-analyst` folder and upload
+   it under *Settings → Capabilities → Skills*.
+
+`--python 3.12` makes uv use its own Python, which always includes SQLite. Data is stored in
+`~/.sec10k`. To use the local clone instead, replace the args with
+`["run", "--quiet", "--project", "/path/to/sec10k", "--extra", "mcp", "sec10k-mcp"]`.
 
 ## CLI
 
