@@ -1,0 +1,17 @@
+{
+  "name": "sec10k",
+  "version": "0.1.0",
+  "description": "Read SEC Form 10-K filings with persistent local memory: fetch from EDGAR for free, search by Item, remember notes and your investment profile.",
+  "author": { "name": "Jan Daniel Semrau" },
+  "keywords": ["sec", "10-k", "edgar", "finance", "filings", "memory", "mcp"],
+  "mcpServers": {
+    "sec10k": {
+      "command": "uv",
+      "args": ["run", "--quiet", "--project", "${CLAUDE_PLUGIN_ROOT}", "--extra", "mcp", "sec10k-mcp"],
+      "env": {
+        "SEC10K_USER_AGENT": "${SEC10K_USER_AGENT:-}",
+        "SEC10K_HOME": "${SEC10K_HOME:-}"
+      }
+    }
+  }
+}

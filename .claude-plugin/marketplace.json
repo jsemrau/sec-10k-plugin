@@ -1,0 +1,11 @@
+{
+  "name": "sec10k",
+  "owner": { "name": "Jan Daniel Semrau" },
+  "plugins": [
+    {
+      "name": "sec10k",
+      "source": "./",
+      "description": "SEC 10-K analyst for Claude: EDGAR fetch, Item-aware search, persistent memory."
+    }
+  ]
+}

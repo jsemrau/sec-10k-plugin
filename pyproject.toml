@@ -1,0 +1,32 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "sec10k"
+version = "0.1.0"
+description = "Pull Form 10-K filings from SEC EDGAR, keep them in local memory, and ask questions with any LLM - or let Claude do it via MCP."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [{ name = "Jan Daniel Semrau" }]
+dependencies = ["httpx>=0.27"]
+
+[project.optional-dependencies]
+anthropic = ["anthropic>=1.14"]
+openai = ["openai>=1.40"]
+mcp = ["mcp>=1.2"]
+secapi = ["sec-api>=1.0"]
+local-embed = ["fastembed>=0.3"]
+all = ["sec10k[anthropic,openai,mcp,secapi]"]
+dev = ["pytest>=8", "sec10k[anthropic,openai,mcp]"]
+
+[project.scripts]
+sec10k = "sec10k.cli:main"
+sec10k-mcp = "sec10k.mcp_server:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/sec10k"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
